@@ -1,2 +1,6 @@
-These .stl files have been slightly modified from the originals to be stronger and easier to print with minimal scaffolding.
+Hardware contains:
+
+- .stl files: These files have been modified from the original poppy designs to be stronger and easier to print in a FDM/FFF 3D printer with minimal scaffolding.
 As a result, they also use more material and take longer to print.
+
+- Anatomical Servo position diagrams: These are reference images to visualize the servo angle limits
