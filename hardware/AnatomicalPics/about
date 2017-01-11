@@ -1,0 +1,19 @@
+Each figure refers to a single isolated motor and shows its neutral position, maximum and minimum angles.
+
+Anatomical Limits:
+
+Shoulder Flexion # 51: (-169)
+Shoulder Hyperextension # 51: (49)
+Neutral # 51: (0)
+
+Abduction # 52: (89)
+Adduction # 52: (0)
+Neutral # 52: (0)
+
+Pronation # 53: (-20)
+Supination # 53: (94)
+Neutral # 53: (0)
+
+Flexion # 54: (-129)
+Extension # 54: (0)
+Neutral # 54: (0)
