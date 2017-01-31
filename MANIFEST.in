@@ -1,0 +1,2 @@
+include poppy_rattle/configuration/*.json
+include poppy_rattle/configuration/*.urdf
