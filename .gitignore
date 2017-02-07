@@ -1,3 +1,4 @@
-.egg
+.eggs/
 build/
 dist/
+*.egg*
