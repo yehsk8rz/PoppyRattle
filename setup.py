@@ -14,7 +14,7 @@ extra = {}
 if sys.version_info >= (3,):
     extra['use_2to3'] = True
 
-setup(name='poppy-rattle’,
+setup(name='poppy-rattle',
       version=version(),
       packages=find_packages(),
 
@@ -26,8 +26,8 @@ setup(name='poppy-rattle’,
 
       zip_safe=False,
 
-      author=‘Forrest Yeh’,
-      author_email=‘fyeh.ca@gmail.com’,
+      author='Forrest Yeh',
+      author_email='fyeh.ca@gmail.com',
       description=' Poppy Rattle Software Library',
       license='GNU GENERAL PUBLIC LICENSE Version 3',
 
