@@ -28,22 +28,22 @@
       "orientation": "direct"
     },
     "r_shoulder_x": {
-      "offset": 90.0,
+      "offset": 0.0,
       "type": "MX-28",
       "id": 52,
       "angle_limit": [
-        -110,
-        105
+        -100, 
+        0
       ],
       "orientation": "indirect"
     },
     "r_shoulder_y": {
-      "offset": 90,
+      "offset": 0,
       "type": "MX-28",
       "id": 51,
       "angle_limit": [
-        -155,
-        120
+        -50,
+        170
       ],
       "orientation": "indirect"
     },
@@ -52,8 +52,8 @@
       "type": "MX-28",
       "id": 54,
       "angle_limit": [
-        7,
-        147
+        0,
+        130
       ],
       "orientation": "indirect"
     }
