@@ -45,6 +45,5 @@ for i in tqdm(range(10000),ncols=4):
 
 data_num = np.asarray(data_table)
 
-for x in data_table:
-	print(x)
-
+print(type(w))
+print(type(data))
