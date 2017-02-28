@@ -6,13 +6,18 @@ import alsaaudio,audioop, sys, librosa
 import numpy as np, torch as th
 from poppy.creatures import PoppyRattle
 from poppy_rattle.primitives import *
+# import poppy_rattle.primitives.
 
-poppy = PoppyRattle(simulator='vrep')
+# poppy = PoppyRattle(simulator='vrep')
+poppy = PoppyRattle()
 
-pos = []
-# for simulator
-pos_Head = []    # Stores the position of the hand (wrist) relative to the head
-pos_Stand = []    # Stores the position of the hand (wrist) relative to the center point between the feet
+if poppy.simulated == True:
+	# for simulator
+	pos = []
+else:
+	pos_Head = []    # Stores the position of the hand (wrist) relative to the head
+	pos_Stand = []    # Stores the position of the hand (wrist) relative to the center point between the feet
+
 TIME = []    # Stores timestamps of when the arm is in a certain position
 sys_load = []    # Stores the torque the motors are going through at a point in time.
                  # Good for being warry of the system load of a task and possibly calculating fatigue
@@ -27,7 +32,8 @@ spike = [[],[]]  # stores instances of abnormal spikes in sound features and a g
 
 
 
-inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK,device='sysdefault:CARD=Microphone')
+# inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK,device='sysdefault:CARD=Microphone')
+inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK,device='sysdefault:CARD=C920')
 inp.setchannels(2)
 inp.setrate(88200)
 inp.setformat(alsaaudio.PCM_FORMAT_GSM)
@@ -42,4 +48,8 @@ if not os.path.exists(csvDir):
 pngDir = "out_Data/png/{}".format(datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d'))
 if not os.path.exists(pngDir):
     os.makedirs(pngDir)
+
+
+
+Rest(poppy, 0)
 
