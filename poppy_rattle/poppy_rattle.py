@@ -1,10 +1,11 @@
 from functools import partial
 import numpy as np
+import os
 
 from poppy.creatures import AbstractPoppyCreature
 
 from .primitives.safe import LimitTorque, TemperatureMonitor
-
+from .primitives.idle import Relax
 class PoppyRattle(AbstractPoppyCreature):
  	
     @classmethod
@@ -18,6 +19,7 @@ class PoppyRattle(AbstractPoppyCreature):
 	
         for m in robot.motors:
     	    m.goto_behavior = 'dummy'
+            m.compliant = False
 	
         # Attach default primitives:
         if not robot.simulated:
@@ -31,7 +33,7 @@ class PoppyRattle(AbstractPoppyCreature):
 	
 	
     	# Idle primitives
-        robot.attach_primitive(Idle(robot, 50), 'IDLE')
+        robot.attach_primitive(Relax(robot), 'relax')
 
     @classmethod
     def add_vrep_methods(cls, robot):

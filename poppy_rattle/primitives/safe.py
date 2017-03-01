@@ -92,7 +92,7 @@ class TemperatureMonitor(pypot.primitive.LoopPrimitive):
 
         self.temp_limit = temp_limit
         self.sound = sound
-        self.watched_motors = self.robot.legs + self.robot.torso + self.robot.arms
+        self.watched_motors = self.robot.motors
         
         if player is not None:
             self.player = player
