@@ -1,0 +1,1 @@
+from .abstractpoppycreature import AbstractPoppyCreature
