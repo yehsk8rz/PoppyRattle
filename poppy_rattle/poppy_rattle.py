@@ -5,7 +5,7 @@ import os
 from poppy.creatures import AbstractPoppyCreature
 
 from .primitives.safe import LimitTorque, TemperatureMonitor
-from .primitives.idle import Relax
+from .primitives.idle import Relax, Attention
 class PoppyRattle(AbstractPoppyCreature):
  	
     @classmethod
@@ -34,6 +34,7 @@ class PoppyRattle(AbstractPoppyCreature):
 	
     	# Idle primitives
         robot.attach_primitive(Relax(robot), 'relax')
+        robot.attach_primitive(Attention(robot), 'attention')
 
     @classmethod
     def add_vrep_methods(cls, robot):
@@ -55,3 +56,5 @@ class PoppyRattle(AbstractPoppyCreature):
                                     raw_bytes, sending=True)
 
         robot.set_vrep_force = partial(set_vrep_force, robot)
+
+

@@ -51,5 +51,9 @@ if not os.path.exists(pngDir):
 
 
 
-Rest(poppy, 0)
+poppy.relax.start()
+poppy.relax.stop()
 
+for m in poppy.motors:
+	m.compliant = True
+poppy.close()
