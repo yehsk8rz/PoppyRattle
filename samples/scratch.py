@@ -5,7 +5,7 @@ import os, time, datetime, threading
 import alsaaudio,audioop, sys, librosa
 import numpy as np, torch as th
 from poppy.creatures import PoppyRattle
-from poppy_rattle.primitives import *
+from poppy_rattle.primitives.instances import *
 # import poppy_rattle.primitives.
 
 # poppy = PoppyRattle(simulator='vrep')
@@ -56,4 +56,5 @@ poppy.relax.stop()
 
 for m in poppy.motors:
 	m.compliant = True
+
 poppy.close()

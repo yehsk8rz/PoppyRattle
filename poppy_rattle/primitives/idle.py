@@ -39,24 +39,4 @@ class Relax(pypot.primitive.LoopPrimitive):
 	def update(self):
 		pass
 
-
-
-class Attention(pypot.primitive.LoopPrimitive):
-	"""docstring for Attention"""
-	
-	def __init__(self, robot,freq=20):
-		pypot.primitive.LoopPrimitive.__init__(self, robot, freq)
-
-	def setup(self):
-		for m in self.robot.motors:	
-			m.compliant = False
-
-	def teardown(self):
-		for m in self.robot.motors:
-			m.compliant = True
-
-	def update(self):
-		pass
-
-
 		
