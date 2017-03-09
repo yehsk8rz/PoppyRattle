@@ -15,7 +15,6 @@ def app(robot,data):
     This function merely appends system sensory information into the appropriate python list.
     """
     
-    #
     if robot.simulated == True:
         # appends wrist position relative to head position
         data.pos_Head.append(robot.get_object_position('r_forearm_visual','head_visual'))
