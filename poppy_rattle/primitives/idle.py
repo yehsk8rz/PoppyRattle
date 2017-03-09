@@ -24,8 +24,7 @@ class Relax(pypot.primitive.LoopPrimitive):
 
 	def setup(self):
 		for m in self.robot.motors:	
-			if m.name is not 'r_arm_z':
-				m.compliant = False
+			m.compliant = False
 
 		[all_sinus.start() for all_sinus in self.all_sinus]
 

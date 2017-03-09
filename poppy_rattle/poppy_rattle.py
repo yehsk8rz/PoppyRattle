@@ -8,7 +8,6 @@ from .primitives.safe import LimitTorque, TemperatureMonitor
 from .primitives.idle import Relax
 
 class PoppyRattle(AbstractPoppyCreature):
-    
     @classmethod
     def setup(cls,robot):
  		
@@ -56,5 +55,7 @@ class PoppyRattle(AbstractPoppyCreature):
                                     raw_bytes, sending=True)
 
         robot.set_vrep_force = partial(set_vrep_force, robot)
+
+
 
 
