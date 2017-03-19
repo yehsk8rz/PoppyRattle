@@ -13,7 +13,7 @@ from poppy_rattle import Data, Instant_Actions
 poppy = PoppyRattle()
 data = Data(poppy)
 act = Instant_Actions(poppy, data)
-
+poppy.temperature_monitoring.start()
 
 # inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK,device='sysdefault:CARD=Microphone')
 inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE,alsaaudio.PCM_NONBLOCK,device='sysdefault:CARD=C920')
@@ -38,6 +38,8 @@ act.rattle_shake()
 
 poppy.relax.start()
 poppy.relax.stop()
+
+poppy.temperature_monitoring.stop()
 
 for m in poppy.motors:
 	m.compliant = True

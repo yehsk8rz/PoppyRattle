@@ -2,15 +2,16 @@ from functools import partial
 import numpy as np
 import os
 
-from poppy.creatures import AbstractPoppyCreature
+from abstractcreature import AbstractPoppyCreature
 
 from .primitives.safe import LimitTorque, TemperatureMonitor
 from .primitives.idle import Relax
-
+from .primitives.motions import Motions
+from .primitives.data import Data
 class PoppyRattle(AbstractPoppyCreature):
     @classmethod
     def setup(cls,robot):
- 		
+        data = Data(robot)
         robot._primitive_manager._filter = partial(np.sum, axis=0)
     	
     	if robot.simulated:
@@ -34,6 +35,9 @@ class PoppyRattle(AbstractPoppyCreature):
 	
     	# Idle primitives
         robot.attach_primitive(Relax(robot), 'relax')
+        robot.attach_primitive(Data(robot),data)
+        robot.attach_primitive(Motions(robot,data), "motions")
+
 
     @classmethod
     def add_vrep_methods(cls, robot):
