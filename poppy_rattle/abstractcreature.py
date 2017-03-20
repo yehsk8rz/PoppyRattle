@@ -98,7 +98,6 @@ class AbstractPoppyCreature(Robot):
                 scene_path = os.path.join(base_path, 'vrep-scene')
                 if scene is None:
                     scene = '{}.ttt'.format(creature)
-                print(os.path.exists(os.path.join(scene_path, scene)))
                 if not os.path.exists(scene):
                     if ((os.path.basename(scene) != scene) or
                             (not os.path.exists(os.path.join(scene_path, scene)))):

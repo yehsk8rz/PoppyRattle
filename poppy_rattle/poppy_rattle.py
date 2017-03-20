@@ -6,10 +6,10 @@ from abstractcreature import AbstractPoppyCreature
 
 from .primitives.safe import LimitTorque, TemperatureMonitor
 from .primitives.idle import Relax
+from .primitives.data import Data
 # from .primitives.motions import Motions
 
 class PoppyRattle(AbstractPoppyCreature):
-    @classmethod
     def setup(cls,robot):
         robot._primitive_manager._filter = partial(np.sum, axis=0)
     	
@@ -35,15 +35,6 @@ class PoppyRattle(AbstractPoppyCreature):
     	# Idle primitives
         robot.attach_primitive(Relax(robot), 'relax')
 
-    @classmethod
-    def vrep_hack(cls, robot):
-        # fix vrep orientation bug
-        wrong_motor = [robot.r_knee_y, robot.abs_x, robot.bust_x]
-
-        for m in wrong_motor:
-            m.direct = not m.direct
-            m.offset = -m.offset
-
 
     @classmethod
     def add_vrep_methods(cls, robot):
@@ -60,8 +51,6 @@ class PoppyRattle(AbstractPoppyCreature):
                                     raw_bytes, sending=True)
 
             packedData = remote_api.simxPackFloats(vector_force)
-
-            
             raw_bytes = (ctypes.c_ubyte * len(packedData)).from_buffer_copy(packedData)
             vrep_io.call_remote_api('simxSetStringSignal', 'force',
                                     raw_bytes, sending=True)

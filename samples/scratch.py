@@ -9,12 +9,14 @@ from poppy_rattle import Data, Instant_Actions
 
 #from poppy_rattle import 
 
-poppy = PoppyRattle(simulator='vrep')
-# poppy = PoppyRattle()
+# poppy = PoppyRattle(simulator='vrep')
+poppy = PoppyRattle()
 
 data = Data(poppy)
 act = Instant_Actions(poppy, data)
-poppy.temperature_monitoring.start()
+
+if not poppy.simulated:
+	poppy.temperature_monitoring.start()
 
 
 wavDir = "in_Data/{}".format(datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d'))
@@ -35,10 +37,11 @@ poppy.relax.start()
 time.sleep(5)
 poppy.relax.stop()
 
-poppy.temperature_monitoring.stop()
+if not poppy.simulated:
+	poppy.temperature_monitoring.stop()
 
-for m in poppy.motors:
-	m.compliant = True
+act.attention()
+act.shutdown()
 
 
 poppy.close()

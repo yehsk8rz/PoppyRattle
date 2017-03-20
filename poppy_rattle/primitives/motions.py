@@ -2,7 +2,7 @@ import pypot.primitive
 import time
 import numpy as np
 
-class Motions(pypot.primitive.LoopPrimitive):
+class Continuous_Wave(pypot.primitive.LoopPrimitive):
     """docstring for Motions"""
     def __init__(self, robot,data,freq=20):
     	pypot.primitive.LoopPrimitive.__init__(self, robot, freq)
