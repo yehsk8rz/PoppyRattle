@@ -126,23 +126,23 @@ class Instant_Actions(object):
 	    
 	    # This will loop through the two arm positions until the set time duration has elapsed. 
 	    while True:
-	    	signal = np.fromstring(signal, 'Int16')
+	    	# signal = np.fromstring(signal, 'Int16')
 	
-	    	#Split the self.data into channels 
-	    	channels = [[] for channel in range(wav_file.getnchannels())]
-	    	for index, datum in enumerate(signal):
-	        	channels[index%len(channels)].append(datum)
+	    	# #Split the self.data into channels 
+	    	# channels = [[] for channel in range(wav_file.getnchannels())]
+	    	# for index, datum in enumerate(signal):
+	     #    	channels[index%len(channels)].append(datum)
 	
-	    	#Get time from indices
-	    	fs = wav_file.getframerate()
-	    	Time=np.linspace(0, len(signal)/len(channels)/fs, num=len(signal)/len(channels))
+	    	# #Get time from indices
+	    	# fs = wav_file.getframerate()
+	    	# Time=np.linspace(0, len(signal)/len(channels)/fs, num=len(signal)/len(channels))
 	
-	    	#Plot
-	    	plt.figure(1)
-	    	plt.title('Signal Wave...')
-	    	for channel in channels:
-		        plt.plot(Time,channel)
-		    	plt.show()
+	    	# #Plot
+	    	# plt.figure(1)
+	    	# plt.title('Signal Wave...')
+	    	# for channel in channels:
+		    #     plt.plot(Time,channel)
+		    # 	plt.show()
 	
 	        t1 = time.time() # Gets the timestamp at the start of each loop
 	        
@@ -188,8 +188,8 @@ class Instant_Actions(object):
 	
 	
 	       
-	        self.data.self.data.app()
-	        TIME.append(t1-t0)
+	        self.data.app()
+	        self.data.TIME.append(t1-t0)
 	        time.sleep(rest)
 	        
 	        
