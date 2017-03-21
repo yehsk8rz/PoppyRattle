@@ -10,6 +10,7 @@ from .primitives.data import Data
 # from .primitives.motions import Motions
 
 class PoppyRattle(AbstractPoppyCreature):
+
     def setup(cls,robot):
         robot._primitive_manager._filter = partial(np.sum, axis=0)
     	
@@ -34,6 +35,7 @@ class PoppyRattle(AbstractPoppyCreature):
 	
     	# Idle primitives
         robot.attach_primitive(Relax(robot), 'relax')
+
 
 
     @classmethod
