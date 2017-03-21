@@ -7,37 +7,38 @@ from abstractcreature import AbstractPoppyCreature
 from .primitives.safe import LimitTorque, TemperatureMonitor
 from .primitives.idle import Relax
 from .primitives.data import Data
-# from .primitives.motions import Motions
 
 class PoppyRattle(AbstractPoppyCreature):
-
+    @classmethod
     def setup(cls,robot):
+        
         robot._primitive_manager._filter = partial(np.sum, axis=0)
-    	
-    	if robot.simulated:
-    	    cls.vrep_hack(robot)
-    	    cls.add_vrep_methods(robot)
-	
+        
+        if robot.simulated:
+            cls.vrep_hack(robot)
+            cls.add_vrep_methods(robot)
+    
         for m in robot.motors:
-    	    m.goto_behavior = 'dummy'
+            m.goto_behavior = 'dummy'
             m.compliant = False
-	
+    
         # Attach default primitives:
         if not robot.simulated:
-    	    sound_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-    	                                     'media', 'sounds', 'error.wav')
+            sound_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                             'media', 'sounds', 'error.wav')
             robot.attach_primitive(TemperatureMonitor(robot, sound=sound_file), 'temperature_monitoring')
             robot.temperature_monitoring.start()
-	
-    	# Safe primitives:
+    
+        # Safe primitives:
         robot.attach_primitive(LimitTorque(robot), 'limit_torque')
-	
-	
-    	# Idle primitives
+    
+    
+        # Idle primitives
         robot.attach_primitive(Relax(robot), 'relax')
 
-
-
+    @classmethod
+    def vrep_hack(cls,robot):
+        pass
     @classmethod
     def add_vrep_methods(cls, robot):
         from pypot.vrep.controller import VrepController
