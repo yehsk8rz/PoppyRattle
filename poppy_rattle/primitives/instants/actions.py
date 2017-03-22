@@ -17,6 +17,7 @@ class Instant_Actions(object):
 			m.compliant = True
 
 	def shutdown(self):
+		self.attention()
 		self.release()
 		self.robot.close()
 
@@ -131,7 +132,7 @@ class Instant_Actions(object):
 	    	# #Split the self.data into channels 
 	    	# channels = [[] for channel in range(wav_file.getnchannels())]
 	    	# for index, datum in enumerate(signal):
-	     #    	channels[index%len(channels)].append(datum)
+	    	# channels[index%len(channels)].append(datum)
 	
 	    	# #Get time from indices
 	    	# fs = wav_file.getframerate()
@@ -199,7 +200,4 @@ class Instant_Actions(object):
 	    
 	         
 	    self.attention()
-	
-	
-	    
 	

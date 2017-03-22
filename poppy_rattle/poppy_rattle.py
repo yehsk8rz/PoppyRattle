@@ -2,11 +2,11 @@ from functools import partial
 import numpy as np
 import os
 
-from abstractcreature import AbstractPoppyCreature
+from .lib.abstractcreature import AbstractPoppyCreature
 
 from .primitives.safe import LimitTorque, TemperatureMonitor
 from .primitives.idle import Relax
-from .primitives.data import Data
+# from .primitives.motions import Continuous_Wave, Anatomical
 
 class PoppyRattle(AbstractPoppyCreature):
     @classmethod
@@ -35,6 +35,11 @@ class PoppyRattle(AbstractPoppyCreature):
     
         # Idle primitives
         robot.attach_primitive(Relax(robot), 'relax')
+
+        # Motion primitives
+        # robot.attach_primitive(Continuous_Wave(robot), 'wave_continuously')
+        # robot.attach_primitive(Anatomical(robot),'anatomical_movements')
+
 
     @classmethod
     def vrep_hack(cls,robot):
