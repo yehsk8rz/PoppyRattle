@@ -1,11 +1,13 @@
 import datetime,time
 import os
-import threading
 import wave
+from multiprocessing.pool import ThreadPool
 
 import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
+import Queue
+from scipy.io import wavfile
 
 
 class Recorder(object):
@@ -15,6 +17,7 @@ class Recorder(object):
                 out_Dir='../out_Data',):
         self.out_Dir = out_Dir
         sd.default.device = sd_dev
+
 
         self.wavDir = "{}/wav/{}".format(self.out_Dir,datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d'))
         if not os.path.exists(self.wavDir):
@@ -31,12 +34,12 @@ class Recorder(object):
 
     # audio recording setup
     # creates a new wavefile for each run
-    def outFile():
+    def outFile(self):
         DATE = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d')
         TIME = datetime.datetime.fromtimestamp(time.time()).strftime('%H-%M-%S')
         return "{}/{}/{}_rattle.wav".format(self.wavDir,DATE,TIME)
 
-    def data_Output(self,outFile=outFile()):
+    def data_Output(self,outFile):
     	outPng = outPng.replace('.wav','.png')
     	outCSV = outCSV.replace('.wav','.csv')
     	spf = wave.open(out,'r')
@@ -62,39 +65,23 @@ class Recorder(object):
 
 
     # function causes the rattle to shake and record audio
-    def sd_rattle(self,function,outFile=outFile()):
-    	l = 0
-    	data = ''
+    def sd_rattle(self,function,outFile,
+                    fs = 44100,
+                    duration = 10):
+
+        sd.default.samplerate = fs
+        sd.default.channels = 2,2
     	
-    	# set up the wave file
-    	w = wave.open(outFile,'w')
-    	# Open the device in nonblocking capture mode. The last argument could
-    	# just as well have been zero for blocking mode. Then we could have
-    	# left out the sleep call in the bottomvim of the loop
-	
-    	w.setnchannels(2)
-    	w.setsampwidth(2)
-    	w.setframerate(44100)
-	
-    	total = 0
-    	count = 0
+        recording = sd.rec
     	
     	# allows function to run in parallel
-    	t = threading.Thread(target=function)
+    	t = threading.Thread(target=sd.rec,args=())
     	t.start()
     	timeStart = time.time()
     	while t.is_alive():
     	    
-    	    timeStop = time.time()
-    	    l,data = inp.read()
-    	    if l:
-    	        w.writeframes(data)
-    	    time.sleep(.001)
-    	rest_position()
-	
-    	print(w.getnframes())
-    	print(w.getframerate())
-    	print(len(data))
+    	
+        wavfile.write(outFile, fs, data)
     	data_Output(outFile)
 
 
