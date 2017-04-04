@@ -2,6 +2,7 @@ import datetime,time
 import os
 import wave
 from multiprocessing.pool import ThreadPool
+import threading 
 
 import sounddevice as sd
 import numpy as np
@@ -34,7 +35,7 @@ class Recorder(object):
 
     # audio recording setup
     # creates a new wavefile for each run
-    def outFile(self):
+    def create_outFile(self):
         DATE = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d')
         TIME = datetime.datetime.fromtimestamp(time.time()).strftime('%H-%M-%S')
         return "{}/{}/{}_rattle.wav".format(self.wavDir,DATE,TIME)
@@ -42,7 +43,7 @@ class Recorder(object):
     def data_Output(self,outFile):
     	outPng = outPng.replace('.wav','.png')
     	outCSV = outCSV.replace('.wav','.csv')
-    	spf = wave.open(out,'r')
+    	spf = wave.open(outFile,'r')
 
     	#Extract Raw Audio from Wav File
     	signal = spf.readframes(-1)
@@ -65,23 +66,27 @@ class Recorder(object):
 
 
     # function causes the rattle to shake and record audio
-    def sd_rattle(self,function,outFile,
+    def sd_rattle(self,function,args=None,outFile=None,
                     fs = 44100,
                     duration = 10):
+        
+        if outFile is None:
+            outFile = self.create_outFile()
 
         sd.default.samplerate = fs
-        sd.default.channels = 2,2
+        sd.default.channels = 2
+        # sd.default.channels = 2,2
     	
-        recording = sd.rec
+        recording = sd.rec(int(duration * fs))
+        function(duration)
     	
     	# allows function to run in parallel
-    	t = threading.Thread(target=sd.rec,args=())
-    	t.start()
-    	timeStart = time.time()
-    	while t.is_alive():
-    	    
+    	# t = threading.Thread(target=recording,args=(int(duration * fs)))
+    	# t.start()
     	
-        wavfile.write(outFile, fs, data)
+    	    
+    	time.sleep(duration)
+        wavfile.write(outFile, fs, recording)
     	data_Output(outFile)
 
 
