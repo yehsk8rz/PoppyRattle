@@ -14,10 +14,14 @@ from scipy.io import wavfile
 class Recorder(object):
     """docstring for Recorder"""
     def __init__(self,
-                sd_dev=sd.default.device,
+                sd_dev=None,
                 out_Dir='../out_Data',):
         self.out_Dir = out_Dir
-        sd.default.device = sd_dev
+
+        if sd_dev is not None:
+            sd.default.device = sd_dev
+            pass
+        
 
 
         self.wavDir = "{}/wav/{}".format(self.out_Dir,datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d'))
@@ -69,23 +73,29 @@ class Recorder(object):
     def sd_rattle(self,function,args=None,outFile=None,
                     fs = 44100,
                     duration = 10):
+
+        print(sd.default.samplerate)
+        print(sd.default.device)
+
+        print(fs)
         
         if outFile is None:
             outFile = self.create_outFile()
 
         sd.default.samplerate = fs
-        sd.default.channels = 2
+        sd.default.channels = 2,2
         # sd.default.channels = 2,2
-    	
-        recording = sd.rec(int(duration * fs))
-        function(duration)
+    	print(sd.default.samplerate)
+
+        recording = sd.rec(duration * fs, dtype='float32')
+        function()
+        sd.wait()
     	
     	# allows function to run in parallel
     	# t = threading.Thread(target=recording,args=(int(duration * fs)))
     	# t.start()
     	
     	    
-    	time.sleep(duration)
         wavfile.write(outFile, fs, recording)
     	data_Output(outFile)
 
