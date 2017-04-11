@@ -11,20 +11,8 @@ from pypot.robot import Robot, from_json, use_dummy_robot
 from pypot.server.snap import SnapRobotServer, find_local_ip
 
 logger = logging.getLogger(__name__)
-SERVICE_THREADS = {}
 
-
-class DeamonThread(Thread):
-    def __init__(self, *args, **kwargs):
-        Thread.__init__(self, *args, **kwargs)
-        self.setDaemon(True)
-
-    def run(self, *args, **kwargs):
-        try:
-            logger.info("Start thread %s" % self)
-            Thread.run(self, *args, **kwargs)
-        except:
-            logger.exception("Error on thread %s " % self)
+MAX_SETUP_TRIALS = 10
 
 
 class classproperty(property):
@@ -44,6 +32,7 @@ class AbstractPoppyCreature(Robot):
                 use_snap=False, snap_host='0.0.0.0', snap_port=6969, snap_quiet=True,
                 use_http=False, http_host='0.0.0.0', http_port=8080, http_quiet=True,
                 use_remote=False, remote_host='0.0.0.0', remote_port=4242,
+                use_ws=False, ws_host='0.0.0.0', ws_port=9009,
                 start_background_services=True, sync=True,
                 **extra):
         """ Poppy Creature Factory.
@@ -53,7 +42,7 @@ class AbstractPoppyCreature(Robot):
         :param str config: path to a specific json config (if None uses the default config of the poppy creature - e.g. poppy_humanoid.json)
 
         :param str simulator: name of the simulator used : 'vrep' or 'poppy-simu'
-        :param str scene: specify a particular simulation scene (if None uses the default scene of the poppy creature - e.g. poppy_humanoid.ttt)
+        :param str scene: specify a particular simulation scene (if None uses the default scene of the poppy creature, use "keep-existing" to keep the current VRep scene - e.g. poppy_humanoid.ttt)
         :param str host: host of the simulator
         :param int port: port of the simulator
         :param bool use_snap: start or not the Snap! API
@@ -86,33 +75,37 @@ class AbstractPoppyCreature(Robot):
 
         if simulator is not None:
             if simulator == 'vrep':
-
+                from pypot.vrep import from_vrep, VrepConnectionError
 
                 ##### ALTERATION #####
                 config = os.path.join(os.path.join(base_path, 'configuration'),
                                       '{}_vrep.json'.format(creature))
                 ##### ALTERATION ####
 
-                from pypot.vrep import from_vrep, VrepConnectionError
-
                 scene_path = os.path.join(base_path, 'vrep-scene')
-                if scene is None:
-                    scene = '{}.ttt'.format(creature)
-                if not os.path.exists(scene):
-                    if ((os.path.basename(scene) != scene) or
-                            (not os.path.exists(os.path.join(scene_path, scene)))):
-                        raise ValueError('Could not find the scene "{}"!'.format(scene))
+                if scene != "keep-existing":
+                    if scene is None:
+                        scene = '{}.ttt'.format(creature)
+
+                    elif not os.path.exists(scene):
+                        if ((os.path.basename(scene) != scene) or
+                                (not os.path.exists(os.path.join(scene_path, scene)))):
+                            raise ValueError('Could not find the scene "{}"!'.format(scene))
 
                     scene = os.path.join(scene_path, scene)
                 # TODO: use the id so we can have multiple poppy creatures
                 # inside a single vrep scene
+
+                # vrep.simxStart no longer listen on localhost
+                if host == 'localhost':
+                    host = '127.0.0.1'
+
                 try:
-                    poppy_creature = from_vrep(config, host, port, scene)
+                    poppy_creature = from_vrep(config, host, port, scene if scene != "keep-existing" else None)
                 except VrepConnectionError:
                     raise IOError('Connection to V-REP failed!')
 
             elif simulator == 'poppy-simu':
-                use_http = True
                 poppy_creature = use_dummy_robot(config)
             else:
                 raise ValueError('Unknown simulation mode: "{}"'.format(simulator))
@@ -120,10 +113,15 @@ class AbstractPoppyCreature(Robot):
             poppy_creature.simulated = True
 
         else:
-            try:
-                poppy_creature = from_json(config, sync, **extra)
-            except IndexError as e:
-                raise IOError('Connection to the robot failed! {}'.format(str(e)))
+            for _ in range(MAX_SETUP_TRIALS):
+                try:
+                    poppy_creature = from_json(config, sync, **extra)
+                    logger.info('Init successful')
+                    break
+                except Exception as e:
+                    logger.warning('Init fail: {}'.format(str(e)))
+            else:
+                raise OSError('Could not initalize robot!')
             poppy_creature.simulated = False
 
         with open(config) as f:
@@ -139,19 +137,24 @@ class AbstractPoppyCreature(Robot):
             snap_url = 'http://snap.berkeley.edu/snapsource/snap.html'
             block_url = 'http://{}:{}/snap-blocks.xml'.format(find_local_ip(), snap_port)
             url = '{}#open:{}'.format(snap_url, block_url)
-            print('SnapRobotServer is now running on: http://{}:{}\n'.format(snap_host, snap_port))
-            print('You can open Snap! interface with loaded blocks at "{}"\n'.format(url))
+            logger.info('SnapRobotServer is now running on: http://{}:{}\n'.format(snap_host, snap_port))
+            logger.info('You can open Snap! interface with loaded blocks at "{}"\n'.format(url))
 
         if use_http:
             from pypot.server.httpserver import HTTPRobotServer
             poppy_creature.http = HTTPRobotServer(poppy_creature, http_host, http_port,
                                                   cross_domain_origin="*", quiet=http_quiet)
-            print('HTTPRobotServer is now running on: http://{}:{}\n'.format(http_host, http_port))
+            logger.info('HTTPRobotServer is now running on: http://{}:{}\n'.format(http_host, http_port))
 
         if use_remote:
             from pypot.server import RemoteRobotServer
             poppy_creature.remote = RemoteRobotServer(poppy_creature, remote_host, remote_port)
-            print('RemoteRobotServer is now running on: http://{}:{}\n'.format(remote_host, remote_port))
+            logger.info('RemoteRobotServer is now running on: http://{}:{}\n'.format(remote_host, remote_port))
+
+        if use_ws:
+            from pypot.server import WsRobotServer
+            poppy_creature.ws = WsRobotServer(poppy_creature, ws_host, ws_port)
+            logger.info('Ws server is now running on: ws://{}:{}\n'.format(ws_host, ws_port))
 
         cls.setup(poppy_creature)
 
@@ -161,18 +164,14 @@ class AbstractPoppyCreature(Robot):
         return poppy_creature
 
     @classmethod
-    def start_background_services(cls, robot, services=['snap', 'http', 'remote']):
+    def start_background_services(cls, robot, services=['snap', 'http', 'remote', 'ws']):
         for service in services:
-            if(hasattr(robot, service)):
-                if service in SERVICE_THREADS:
-                    logger.warning(
-                        "A {} background service is already running, you may have to restart your script or reset your notebook kernel to start it again.".format(service))
-                else:
-                    SERVICE_THREADS[service] = DeamonThread(
-                        target=getattr(robot, service).run, name="{}_server".format(service))
-                    SERVICE_THREADS[service].daemon = True
-                    SERVICE_THREADS[service].start()
-                    logger.info("Starting {} service".format(service))
+            if hasattr(robot, service):
+                s = Thread(target=getattr(robot, service).run,
+                           name='{}_server'.format(service))
+                s.daemon = True
+                s.start()
+                logger.info("Starting {} service".format(service))
 
     @classmethod
     def setup(cls, robot):

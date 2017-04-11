@@ -16,8 +16,8 @@ sd.default.samplerate = 44100
 print(sd.default.samplerate)
 out_Dir = "out_Data"
 
-# poppy = PoppyRattle(simulator='vrep')
-poppy = PoppyRattle()
+poppy = PoppyRattle(simulator='vrep')
+# poppy = PoppyRattle()
 
 data = Data(poppy)
 act = Instant_Actions(poppy, data)
