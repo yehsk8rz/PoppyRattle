@@ -31,10 +31,23 @@ class Instant_Actions(object):
 	        :param float rest: time in seconds for the time the arm has to finish its motion
 	            ::default is set to 1/2 a second 
 	    """
-	    self.robot.r_shoulder_y.goal_position = -150
-	    self.robot.r_shoulder_x.goal_position = 30
-	    self.robot.r_arm_z.goal_position = -50
-	    self.robot.r_elbow_y.goal_position = 0
+	    # define the first point in space
+	    shoulder_y0 = -150
+	    shoulder_x0 = 30
+	    arm_0 = -50
+	    elbow_0 = 0
+	    
+	    # define the second point in space
+	    shoulder_y1 = -130
+	    shoulder_x1 = -10
+	    arm_1 = -70
+	    elbow_1 = -65
+
+
+	    self.robot.r_shoulder_y.goal_position = shoulder_y0
+	    self.robot.r_shoulder_x.goal_position = shoulder_x0
+	    self.robot.r_arm_z.goal_position = arm_0
+	    self.robot.r_elbow_y.goal_position = elbow_0
 	    time.sleep(1)
 	    t0 = time.time()   # Gets the timestamp at the start of the waving motion
 	    
@@ -50,16 +63,16 @@ class Instant_Actions(object):
 	        # run for sec
 	        self.data.app()
 	        self.data.TIME.append(t1-t0)
-	        self.robot.r_shoulder_y.goal_position = -150
+	        self.robot.r_shoulder_y.goal_position = shoulder_y0
 	        self.data.app()
 	        self.data.TIME.append(t1-t0)
-	        self.robot.r_shoulder_x.goal_position = 30
+	        self.robot.r_shoulder_x.goal_position = shoulder_x0
 	        self.data.app()
 	        self.data.TIME.append(t1-t0)
-	        self.robot.r_arm_z.goal_position = -50
+	        self.robot.r_arm_z.goal_position = arm_0
 	        self.data.app()
 	        self.data.TIME.append(t1-t0)
-	        self.robot.r_elbow_y.goal_position = 0
+	        self.robot.r_elbow_y.goal_position = elbow_0
 	        
 	        self.data.app()
 	        self.data.TIME.append(t1-t0)
@@ -67,16 +80,16 @@ class Instant_Actions(object):
 	    
 	        self.data.app()
 	        self.data.TIME.append(t1-t0)
-	        self.robot.r_shoulder_y.goal_position = -130
+	        self.robot.r_shoulder_y.goal_position = shoulder_y1
 	        self.data.app()
 	        self.data.TIME.append(t1-t0)
-	        self.robot.r_shoulder_x.goal_position = -10
+	        self.robot.r_shoulder_x.goal_position = shoulder_x1
 	        self.data.app()
 	        self.data.TIME.append(t1-t0)
-	        self.robot.r_arm_z.goal_position = -70
+	        self.robot.r_arm_z.goal_position = arm_1
 	        self.data.app()
 	        self.data.TIME.append(t1-t0)
-	        self.robot.r_elbow_y.goal_position = -65
+	        self.robot.r_elbow_y.goal_position = elbow_1
 	        
 	        self.data.app()
 	        self.data.TIME.append(t1-t0)

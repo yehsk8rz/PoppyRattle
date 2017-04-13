@@ -42,16 +42,16 @@ class Recorder(object):
     def create_outFile(self):
         DATE = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d')
         TIME = datetime.datetime.fromtimestamp(time.time()).strftime('%H-%M-%S')
-        return "{}/{}/{}_rattle.wav".format(self.wavDir,DATE,TIME)
+        return "{}/{}_rattle.wav".format(self.wavDir,TIME)
 
     def data_Output(self,outFile):
-    	outPng = outPng.replace('.wav','.png')
-    	outCSV = outCSV.replace('.wav','.csv')
+    	outPng = outFile.replace('.wav','.png')
+    	outCSV = outFile.replace('.wav','.csv')
     	spf = wave.open(outFile,'r')
 
     	#Extract Raw Audio from Wav File
     	signal = spf.readframes(-1)
-    	signal = np.fromstring(signal, 'Int16')
+    	signal = np.fromstring(signal, 'float32')
     	fs = spf.getframerate()
 	
     	Time=np.linspace(0, len(signal)/fs, num=len(signal))
@@ -78,17 +78,18 @@ class Recorder(object):
         print(sd.default.device)
 
         print(fs)
+        print(duration)
         
         if outFile is None:
             outFile = self.create_outFile()
 
         sd.default.samplerate = fs
         sd.default.channels = 2,2
-        # sd.default.channels = 2,2
     	print(sd.default.samplerate)
 
-        recording = sd.rec(duration * fs, dtype='float32')
-        function()
+        recording = sd.rec(duration * fs)
+        # recording = sd.rec(duration * fs,dtype='float32')
+        function(sec=duration)
         sd.wait()
     	
     	# allows function to run in parallel
@@ -97,7 +98,7 @@ class Recorder(object):
     	
     	    
         wavfile.write(outFile, fs, recording)
-    	data_Output(outFile)
+    	self.data_Output(outFile)
 
 
     def set_out_Dir(self,out_Dir):
