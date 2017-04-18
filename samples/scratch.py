@@ -11,11 +11,9 @@ from poppy_rattle import Data, Instant_Actions, Recorder
 # sd.query_devices()
 ## Then you can set the device as its name in a string ##
 # recording_device = 'HD Pro Webcam C920'
-sd.default.samplerate = 44100
 # sd.default.device = recording_device
 ## Or as the index number associated with it
 # recording_device = 4
-print(sd.default.samplerate)
 out_Dir = "out_Data"
 
 # poppy = PoppyRattle(simulator='vrep')
@@ -24,7 +22,6 @@ poppy = PoppyRattle()
 data = Data(poppy)
 act = Instant_Actions(poppy, data)
 rec = Recorder(out_Dir=out_Dir)
-print(sd.default.samplerate)
 
 if not poppy.simulated:
 	poppy.temperature_monitoring.start()
@@ -33,10 +30,9 @@ if not poppy.simulated:
 # act.hand_wave(sec=3)
 # act.rattle_shake(sec=3)
 rec.sd_rattle(act.hand_wave,duration=3)
+rec.sd_rattle(poppy.relax, duration=12)
 
-poppy.relax.start()
-time.sleep(5)
-poppy.relax.stop()
+
 
 if not poppy.simulated:
 	poppy.temperature_monitoring.stop()

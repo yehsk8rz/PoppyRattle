@@ -44,28 +44,26 @@ class Recorder(object):
         TIME = datetime.datetime.fromtimestamp(time.time()).strftime('%H-%M-%S')
         return "{}/{}_rattle.wav".format(self.wavDir,TIME)
 
-    def data_Output(self,outFile):
+    def data_Output(self,outFile,fs,data):
     	outPng = outFile.replace('.wav','.png')
+        outPng = outPng.replace('/wav/','/png/')
     	outCSV = outFile.replace('.wav','.csv')
-    	spf = wave.open(outFile,'r')
-
-    	#Extract Raw Audio from Wav File
-    	signal = spf.readframes(-1)
-    	signal = np.fromstring(signal, 'float32')
-    	fs = spf.getframerate()
+        outCSV= outCSV.replace('/wav/','/csv/')
 	
-    	Time=np.linspace(0, len(signal)/fs, num=len(signal))
+    	Time=np.linspace(0, len(data)/fs, num=len(data))
 	
     	plt.figure(1)
     	plt.title('Mel spectrogram(Stereo)')
     	plt.xlabel('Time(s)')
     	plt.ylabel('Frequency(Hz)')
-	
-    	plt.plot(Time,signal)
+
+        np.savetxt(outCSV, data,delimiter=',',fmt='%.3e')
+
+    	plt.plot(Time,data)
     	plt.savefig(outPng)
     	plt.show()    
     	
-    	np.savetxt(outCSV, signal,delimiter=',',fmt='%.3e')
+    	
 
 
 
@@ -74,23 +72,22 @@ class Recorder(object):
                     fs = 44100,
                     duration = 10):
 
-        print(sd.default.samplerate)
-        print(sd.default.device)
-
-        print(fs)
-        print(duration)
         
         if outFile is None:
             outFile = self.create_outFile()
 
-        sd.default.samplerate = fs
         sd.default.channels = 2,2
-    	print(sd.default.samplerate)
+        sd.default.samplerate = fs
 
-        recording = sd.rec(duration * fs)
-        # recording = sd.rec(duration * fs,dtype='float32')
-        function(sec=duration)
-        sd.wait()
+        recording = sd.rec(duration * fs,dtype='float32')
+        if('primitives' in str(type(function))):
+            function.start()
+            sd.wait()
+            function.stop()
+
+        else:
+            function(sec=duration)
+            sd.wait()
     	
     	# allows function to run in parallel
     	# t = threading.Thread(target=recording,args=(int(duration * fs)))
@@ -98,7 +95,7 @@ class Recorder(object):
     	
     	    
         wavfile.write(outFile, fs, recording)
-    	self.data_Output(outFile)
+    	self.data_Output(outFile, fs, recording)
 
 
     def set_out_Dir(self,out_Dir):

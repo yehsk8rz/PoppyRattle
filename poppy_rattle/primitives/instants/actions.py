@@ -22,7 +22,7 @@ class Instant_Actions(object):
 		self.robot.close()
 
 	
-	def hand_wave(self,sec=10, rest=0.5):
+	def hand_wave(self,sec=None, rest=0.5):
 	    """
 	    This function is a primitive. When called, the robotic arm will move between two set point in space, defined by the angles the motors are travelling to.
 	    
@@ -48,55 +48,101 @@ class Instant_Actions(object):
 	    self.robot.r_shoulder_x.goal_position = shoulder_x0
 	    self.robot.r_arm_z.goal_position = arm_0
 	    self.robot.r_elbow_y.goal_position = elbow_0
+
+
+
 	    time.sleep(1)
 	    t0 = time.time()   # Gets the timestamp at the start of the waving motion
 	    
-	    
+	    if sec is None:
+	    	print("Press Ctr-C to end the arm wave:")
+
 	    # This will loop through the two arm positions until the set time duration has elapsed. 
 	    while True:
 	        t1 = time.time() # Gets the timestamp at the end of each loop
-	        
-	        if t1-t0 >= sec: # This will end the loop and wave motion when the allotted time has expired
-	            break
-	            
-	        
-	        # run for sec
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
-	        self.robot.r_shoulder_y.goal_position = shoulder_y0
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
-	        self.robot.r_shoulder_x.goal_position = shoulder_x0
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
-	        self.robot.r_arm_z.goal_position = arm_0
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
-	        self.robot.r_elbow_y.goal_position = elbow_0
-	        
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
-	       	time.sleep(rest)
-	    
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
-	        self.robot.r_shoulder_y.goal_position = shoulder_y1
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
-	        self.robot.r_shoulder_x.goal_position = shoulder_x1
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
-	        self.robot.r_arm_z.goal_position = arm_1
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
-	        self.robot.r_elbow_y.goal_position = elbow_1
-	        
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
-	        
-	        time.sleep(rest)
-	        self.data.app()
-	        self.data.TIME.append(t1-t0)
+
+	        if sec is not None:
+	            if t1-t0 >= sec: # This will end the loop and wave motion when the allotted time has expired
+	            	break
+
+	            # run for sec
+	            self.data.app()
+	            self.data.TIME.append(t1-t0)
+	            self.robot.r_shoulder_y.goal_position = shoulder_y0
+	            self.data.app()
+	            self.data.TIME.append(t1-t0)
+	            self.robot.r_shoulder_x.goal_position = shoulder_x0
+	            self.data.app()
+	            self.data.TIME.append(t1-t0)
+	            self.robot.r_arm_z.goal_position = arm_0
+        	    self.data.app()
+        	    self.data.TIME.append(t1-t0)
+        	    self.robot.r_elbow_y.goal_position = elbow_0
+		        
+		        self.data.app()
+		        self.data.TIME.append(t1-t0)
+		        time.sleep(rest)
+
+		        self.data.app()
+		        self.data.TIME.append(t1-t0)
+		        self.robot.r_shoulder_y.goal_position = shoulder_y1
+		        self.data.app()
+		        self.data.TIME.append(t1-t0)
+		        self.robot.r_shoulder_x.goal_position = shoulder_x1
+		        self.data.app()
+		        self.data.TIME.append(t1-t0)
+		    self.robot.r_arm_z.goal_position = arm_1
+		    self.data.app()
+		    self.data.TIME.append(t1-t0)
+		    self.robot.r_elbow_y.goal_position = elbow_1
+		        
+		    self.data.app()
+		    self.data.TIME.append(t1-t0)
+		        
+		    time.sleep(rest)
+		    self.data.app()
+		    self.data.TIME.append(t1-t0)
+		else:
+		    try:
+		        # run for sec
+			self.data.app()
+			self.data.TIME.append(t1-t0)
+			self.robot.r_shoulder_y.goal_position = shoulder_y0
+			self.data.app()
+			self.data.TIME.append(t1-t0)
+			self.robot.r_shoulder_x.goal_position = shoulder_x0
+			self.data.app()
+			self.data.TIME.append(t1-t0)
+			self.robot.r_arm_z.goal_position = arm_0
+			self.data.app()
+			self.data.TIME.append(t1-t0)
+			self.robot.r_elbow_y.goal_position = elbow_0
+			        
+			self.data.app()
+			self.data.TIME.append(t1-t0)
+			time.sleep(rest)
+			    
+			self.data.app()
+		        self.data.TIME.append(t1-t0)
+	    	        self.robot.r_shoulder_y.goal_position = shoulder_y1
+    		        self.data.app()
+			self.data.TIME.append(t1-t0)
+		        self.robot.r_shoulder_x.goal_position = shoulder_x1
+	    	        self.data.app()
+    		        self.data.TIME.append(t1-t0)
+			self.robot.r_arm_z.goal_position = arm_1
+			self.data.app()
+			self.data.TIME.append(t1-t0)
+			self.robot.r_elbow_y.goal_position = elbow_1
+			        
+		        self.data.app()
+	    	        self.data.TIME.append(t1-t0)
+			        
+    		        time.sleep(rest)
+                        self.data.app()
+		        self.data.TIME.append(t1-t0)
+		    except KeyboardInterrupt:
+			break
 
 
 	    self.attention()
@@ -140,23 +186,6 @@ class Instant_Actions(object):
 	    
 	    # This will loop through the two arm positions until the set time duration has elapsed. 
 	    while True:
-	    	# signal = np.fromstring(signal, 'Int16')
-	
-	    	# #Split the self.data into channels 
-	    	# channels = [[] for channel in range(wav_file.getnchannels())]
-	    	# for index, datum in enumerate(signal):
-	    	# channels[index%len(channels)].append(datum)
-	
-	    	# #Get time from indices
-	    	# fs = wav_file.getframerate()
-	    	# Time=np.linspace(0, len(signal)/len(channels)/fs, num=len(signal)/len(channels))
-	
-	    	# #Plot
-	    	# plt.figure(1)
-	    	# plt.title('Signal Wave...')
-	    	# for channel in channels:
-		    #     plt.plot(Time,channel)
-		    # 	plt.show()
 	
 	        t1 = time.time() # Gets the timestamp at the start of each loop
 	        
