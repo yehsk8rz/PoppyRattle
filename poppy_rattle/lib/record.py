@@ -13,6 +13,7 @@ from scipy.io import wavfile
 
 class Recorder(object):
     """docstring for Recorder"""
+
     def __init__(self,
                 sd_dev=None,
                 out_Dir='../out_Data',):
@@ -70,7 +71,8 @@ class Recorder(object):
     # function causes the rattle to shake and record audio
     def sd_rattle(self,function,args=None,outFile=None,
                     fs = 44100,
-                    duration = 10):
+                    duration = None,
+                    rec_len = 30):
 
         
         if outFile is None:
@@ -79,23 +81,46 @@ class Recorder(object):
         sd.default.channels = 2,2
         sd.default.samplerate = fs
 
-        recording = sd.rec(duration * fs,dtype='float32')
-        if('primitives' in str(type(function))):
-            function.start()
+        if (duration == None):
+            int num = 0
+            if sec is None:
+                print("Press Ctr-C to end the recording:")
+            while(True):
+                out = 
+                try:
+                    recording = sd.rec(rec_len * fs, dtype='float32')
+                    if('primitives' in str(type(function))):
+                        function.start()
+                        sd.wait()
+                        function.stop()
+                    else:
+                        function(sec=rec_len)
+                        sd.wait()
+                except KeyboardInterrupt:
+                    break
+
+                wavfile.write(outFile, fs, recording)
+                self.data_Output(outFile, fs, recording)
+            
             sd.wait()
-            function.stop()
+            wavfile.write(outFile, fs, recording)
+            self.data_Output(outFile, fs, recording)
 
         else:
-            function(sec=duration)
-            sd.wait()
-    	
-    	# allows function to run in parallel
-    	# t = threading.Thread(target=recording,args=(int(duration * fs)))
-    	# t.start()
-    	
-    	    
-        wavfile.write(outFile, fs, recording)
-    	self.data_Output(outFile, fs, recording)
+            recording = sd.rec(duration * fs,dtype='float32')
+            if('primitives' in str(type(function))):
+                function.start()
+                sd.wait()
+                function.stop()
+
+            else:
+                function(sec=duration)
+                sd.wait()
+
+
+            wavfile.write(outFile, fs, recording)
+            self.data_Output(outFile, fs, recording)
+
 
 
     def set_out_Dir(self,out_Dir):

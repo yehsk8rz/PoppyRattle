@@ -27,11 +27,12 @@ if not poppy.simulated:
 	poppy.temperature_monitoring.start()
 
 
-# act.hand_wave(sec=3)
+act.hand_wave()
 # act.rattle_shake(sec=3)
 rec.sd_rattle(act.hand_wave,duration=3)
-rec.sd_rattle(poppy.relax, duration=12)
 
+rec.sd_rattle(poppy.relax, duration=12)
+act.attention()
 
 
 if not poppy.simulated:
