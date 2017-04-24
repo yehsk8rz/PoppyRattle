@@ -86,7 +86,6 @@ class Recorder(object):
             if sec is None:
                 print("Press Ctr-C to end the recording:")
             while(True):
-                out = 
                 try:
                     recording = sd.rec(rec_len * fs, dtype='float32')
                     if('primitives' in str(type(function))):
