@@ -75,7 +75,7 @@ class Instant_Actions(object):
 	            self.data.app()
 	            self.data.TIME.append(t1-t0)
 	            self.robot.r_arm_z.goal_position = arm_0
-	    	    self.data.app()
+	            self.data.app()
 	    	    self.data.TIME.append(t1-t0)
 	    	    self.robot.r_elbow_y.goal_position = elbow_0
 

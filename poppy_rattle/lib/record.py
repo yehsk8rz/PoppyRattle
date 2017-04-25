@@ -7,7 +7,6 @@ import threading
 import sounddevice as sd
 import numpy as np
 import matplotlib.pyplot as plt
-import Queue
 from scipy.io import wavfile
 
 
@@ -82,7 +81,7 @@ class Recorder(object):
         sd.default.samplerate = fs
 
         if (duration == None):
-            int num = 0
+            num = 0
             if sec is None:
                 print("Press Ctr-C to end the recording:")
             while(True):
