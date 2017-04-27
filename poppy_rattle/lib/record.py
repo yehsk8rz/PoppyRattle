@@ -44,24 +44,25 @@ class Recorder(object):
         TIME = datetime.datetime.fromtimestamp(time.time()).strftime('%H-%M-%S')
         return "{}/{}_rattle.wav".format(self.wavDir,TIME)
 
+    
     def data_Output(self,outFile,fs,data):
-    	outPng = outFile.replace('.wav','.png')
+        outPng = outFile.replace('.wav','.png')
         outPng = outPng.replace('/wav/','/png/')
-    	outCSV = outFile.replace('.wav','.csv')
+        outCSV = outFile.replace('.wav','.csv')
         outCSV= outCSV.replace('/wav/','/csv/')
-	
-    	Time=np.linspace(0, len(data)/fs, num=len(data))
-	
-    	plt.figure(1)
-    	plt.title('Mel spectrogram(Stereo)')
-    	plt.xlabel('Time(s)')
-    	plt.ylabel('Frequency(Hz)')
+
+        Time=np.linspace(0, len(data)/fs, num=len(data))
+
+        plt.figure(1)
+        plt.title('Mel spectrogram(Stereo)')
+        plt.xlabel('Time(s)')
+        plt.ylabel('Frequency(Hz)')
 
         np.savetxt(outCSV, data,delimiter=',',fmt='%.3e')
 
-    	plt.plot(Time,data)
-    	plt.savefig(outPng)
-    	plt.show()    
+        plt.plot(Time,data)
+        plt.savefig(outPng)
+        plt.show()    
     	
     	
 

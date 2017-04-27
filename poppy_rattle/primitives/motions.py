@@ -1,7 +1,7 @@
 import pypot.primitive
 import time
 import numpy as np
-from .instants import Instant_Actions
+from instants import Instant_Actions
 
 """
 Figure out how to pass  data
@@ -32,42 +32,42 @@ class Continuous_Wave(pypot.primitive.LoopPrimitive):
 
     def start(self):
         self.setup()
-    	t1 = time.time() # Gets the timestamp at the end of each loop
+        t1 = time.time() # Gets the timestamp at the end of each loop
+
+        # self.data.app()
+        # self.data.TIME.append(t1-t0)
+        self.robot.r_shoulder_y.goal_position = -150
+    	# self.data.app()
+    	# self.data.TIME.append(t1-t0)
+        self.robot.r_shoulder_x.goal_position = 30
+    	# self.data.app()
+    	# self.data.TIME.append(t1-t0)
+        self.robot.r_arm_z.goal_position = -50
+    	# self.data.app()
+    	# self.data.TIME.append(t1-t0)
+        self.robot.r_elbow_y.goal_position = 0
 
     	# self.data.app()
     	# self.data.TIME.append(t1-t0)
-    	self.robot.r_shoulder_y.goal_position = -150
-    	# self.data.app()
-    	# self.data.TIME.append(t1-t0)
-    	self.robot.r_shoulder_x.goal_position = 30
-    	# self.data.app()
-    	# self.data.TIME.append(t1-t0)
-    	self.robot.r_arm_z.goal_position = -50
-    	# self.data.app()
-    	# self.data.TIME.append(t1-t0)
-    	self.robot.r_elbow_y.goal_position = 0
+        time.sleep(rest)
 
     	# self.data.app()
     	# self.data.TIME.append(t1-t0)
-    	time.sleep(rest)
-
+        self.robot.r_shoulder_y.goal_position = -130
     	# self.data.app()
     	# self.data.TIME.append(t1-t0)
-    	self.robot.r_shoulder_y.goal_position = -130
+        self.robot.r_shoulder_x.goal_position = -10
     	# self.data.app()
     	# self.data.TIME.append(t1-t0)
-    	self.robot.r_shoulder_x.goal_position = -10
+        self.robot.r_arm_z.goal_position = -70
     	# self.data.app()
     	# self.data.TIME.append(t1-t0)
-    	self.robot.r_arm_z.goal_position = -70
-    	# self.data.app()
-    	# self.data.TIME.append(t1-t0)
-    	self.robot.r_elbow_y.goal_position = -65
+        self.robot.r_elbow_y.goal_position = -65
 
     	# self.data.app()
     	# self.data.TIME.append(t1-t0)
 
-    	time.sleep(rest)
+        time.sleep(rest)
     	# self.data.app()
     	# self.data.TIME.append(t1-t0)
 
@@ -78,7 +78,7 @@ class Continuous_Wave(pypot.primitive.LoopPrimitive):
     def stop(self):
         for m in self.robot.motors:
             m.goal_position = 0
-    	    m.compliant = True
+            m.compliant = True
 		
 
     def update(self):
@@ -161,7 +161,7 @@ class Anatomical(pypot.primitive.LoopPrimitive):
     def stop(self):
         for m in self.robot.motors:
             m.goal_position = 0
-    	    m.compliant = True
+            m.compliant = True
 		
 
     def update(self):
